@@ -34,6 +34,8 @@ We track file changes using a **Merkle tree** - a data structure where each file
 
 When hashes differ, we know content changed. This enables efficient sync.
 
+> **Note:** This is a simplified "flat" Merkle tree for this exercise. Real implementations often use hierarchical trees (directory → subdirectory → file) for even more efficient partial comparisons. We'll discuss this in extensions.
+
 ---
 
 ## Your Task
@@ -98,15 +100,13 @@ Implement `MerkleSyncClient` with:
 
 ```bash
 # Install dependencies
-pip install -r starter/server/requirements.txt
-pip install -r starter/client/requirements.txt
-pip install pytest httpx
+pip install -r requirements.txt
 
 # Start the server
 cd starter/server
 python main.py
 
-# Run tests (in another terminal)
+# Run tests (in another terminal, from problem directory)
 pytest test_sync.py -v
 ```
 
@@ -137,7 +137,8 @@ pytest test_sync.py -v
 
 ## Extension Topics (if time permits)
 
-- How would this scale to 1M files?
+- How would you change the tree structure to scale to 1M files? (hint: hierarchical Merkle tree)
+- How would you sync only a subtree (e.g., just `src/` directory)?
 - How would you handle conflicts?
 - How would you add authentication?
 - How would you shard across multiple pods?

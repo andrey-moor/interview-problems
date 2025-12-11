@@ -1,0 +1,58 @@
+# Kubernetes Deployment for Merkle Tree Sync Server
+#
+# TODO: Review and modify as needed for your implementation
+#
+# This is a basic deployment template. Consider:
+# - Resource limits
+# - Replica count for availability
+# - Environment variables for configuration
+# - Volume mounts if needed for persistent state
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: merkle-sync-server
+  labels:
+    app: merkle-sync-server
+spec:
+  replicas: 1  # TODO: Consider scaling for production
+  selector:
+    matchLabels:
+      app: merkle-sync-server
+  template:
+    metadata:
+      labels:
+        app: merkle-sync-server
+    spec:
+      containers:
+        - name: server
+          image: merkle-sync-server:latest  # TODO: Update with your image
+          ports:
+            - containerPort: 8000
+              name: http
+          # Health probes using the /health endpoint
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          # Resource limits (adjust based on tree size)
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          # Environment variables
+          env:
+            - name: LOG_LEVEL
+              value: "INFO"
+            # TODO: Add any configuration your server needs

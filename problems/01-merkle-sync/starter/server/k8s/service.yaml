@@ -1,0 +1,19 @@
+# Kubernetes Service for Merkle Tree Sync Server
+#
+# Exposes the server within the cluster (ClusterIP) or externally (LoadBalancer/NodePort)
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: merkle-sync-server
+  labels:
+    app: merkle-sync-server
+spec:
+  type: ClusterIP  # Change to LoadBalancer for external access
+  ports:
+    - port: 80
+      targetPort: 8000
+      protocol: TCP
+      name: http
+  selector:
+    app: merkle-sync-server
